@@ -1,10 +1,11 @@
 import React, { useCallback } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch, shallowEqual } from "react-redux"
 import { exampleAction } from "../store/action"
+import { getState } from "../store/selectors"
 import { Home } from "./Home"
 
 export const Profile = () => {
-  const { showName, name } = useSelector((store) => store)
+  const { showName, name } = useSelector(getState, shallowEqual)
   const dispatch = useDispatch()
   const setShowName = useCallback(() => {
     dispatch(exampleAction("Ахсар"))
