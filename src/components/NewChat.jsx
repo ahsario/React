@@ -1,22 +1,21 @@
 import { TextField, FloatingActionButton } from "material-ui"
 import ContentAdd from "material-ui/svg-icons/content/add"
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
+import { useDispatch } from "react-redux"
+import { addChatAction } from "../store/action"
 import "../styles/index.css"
 
-export const NewChat = ({ chats, setChats }) => {
+export const NewChat = () => {
+  const dispatch = useDispatch()
+  const addChat = useCallback(
+    (addName) => {
+      dispatch(addChatAction(addName))
+    },
+    [dispatch],
+  )
   const [state, setState] = useState("")
-  const handleClick = (message) => {
-    setChats([
-      ...chats,
-      {
-        id: chats[chats.length - 1].id + 1,
-        name: message,
-        messages: [
-          { text: "Привет!", sender: "bot" },
-          { text: "Как дела?", sender: "bot" },
-        ],
-      },
-    ])
+  const handleClick = (addName) => {
+    addChat(addName)
     setState("")
   }
 
@@ -24,26 +23,15 @@ export const NewChat = ({ chats, setChats }) => {
     setState(event.target.value)
   }
 
-  const handleKeyUp = (event, message) => {
+  const handleKeyUp = (event, addName) => {
     if (event.keyCode === 13) {
-      // Enter
-      setChats([
-        ...chats,
-        {
-          id: chats[chats.length - 1].id + 1,
-          name: message,
-          messages: [
-            { text: "Привет!3", sender: "bot" },
-            { text: "Как дела?", sender: "bot" },
-          ],
-        },
-      ])
+      addChat(addName)
       setState("")
     }
   }
 
   return (
-    <div style={{ width: "100%", display: "flex" }}>
+    <div style={{ display: "flex", margin: "30px 100px" }}>
       <TextField
         name="input"
         fullWidth={true}

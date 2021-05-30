@@ -1,12 +1,13 @@
 import "../styles/index.css"
 import React from "react"
+import { useSelector } from "react-redux"
 
-export class Header extends React.Component {
-  render() {
-    return (
-      <div className="heading">
-        <h1>Ваша переписка</h1>
-      </div>
-    )
-  }
+export const Header = () => {
+  const { name } = useSelector((store) => store)
+
+  return (
+    <div className="heading">
+      <h1>{name} это Ваша переписка</h1>
+    </div>
+  )
 }
