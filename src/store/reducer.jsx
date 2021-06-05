@@ -85,6 +85,15 @@ export const messageFieldReducer = (state = initialState, action) => {
         ],
       }
 
+    case "DEL_CHAT_ACTION":
+      return {
+        ...state,
+        initialChats: [
+          ...[...state.initialChats].slice(0, action.payload.id - 1),
+          ...[...state.initialChats].slice(action.payload.id),
+        ],
+      }
+
     default:
       return state
   }

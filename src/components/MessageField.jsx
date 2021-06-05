@@ -1,8 +1,9 @@
 import { TextField, FloatingActionButton } from "material-ui"
 import SendIcon from "material-ui/svg-icons/content/send"
 import React, { useEffect, useState, useRef, useCallback } from "react"
-import { useSelector, useDispatch } from "react-redux"
+import { useSelector, useDispatch, shallowEqual } from "react-redux"
 import { addMessageAction } from "../store/action"
+import { getState } from "../store/selectors"
 import { Message } from "./Message"
 import "../styles/index.css"
 
@@ -11,7 +12,10 @@ export const MessageField = () => {
   const textInput = useRef()
   useEffect(() => textInput.current.focus(), [])
 
-  const { initialChats, currentChat, name } = useSelector((store) => store)
+  const { initialChats, currentChat, name } = useSelector(
+    getState,
+    shallowEqual,
+  )
   const dispatch = useDispatch()
 
   useEffect(() => {
