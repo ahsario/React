@@ -1,5 +1,5 @@
 {
-  "name": "gb_react",
+  "name": "geekmessenger",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development webpack",
     "start": "cross-env NODE_ENV=development webpack serve"
   },
-  "author": "A. Schmidt",
+  "author": "Akhsario",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.14.2",
@@ -35,9 +35,13 @@
     "webpack-dev-server": "^3.11.2"
   },
   "dependencies": {
+    "material-ui": "^0.20.2",
     "prettier": "^2.3.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.1.0"
   }
 }
