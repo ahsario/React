@@ -2,30 +2,33 @@ import { List, ListItem } from "material-ui"
 import "../styles/index.css"
 import CommunicationChatBubble from "material-ui/svg-icons/communication/chat-bubble"
 import React, { useCallback } from "react"
-import { useSelector, useDispatch, shallowEqual } from "react-redux"
-import { setCurrentChatAction, deleteCurrentChatAction } from "../store/action"
-import { getState } from "../store/selectors"
+import { connect } from "react-redux"
+import { setCurrentChatAction, deleteCurrentChatAction } from "../store/actions"
 
-export const ChatList = () => {
-  const { initialChats, currentChat } = useSelector(getState, shallowEqual)
-  const dispatch = useDispatch()
+const ChatLists = ({
+  chats,
+  deleteCurrentChatAction,
+  setCurrentChatAction,
+}) => {
   const setCurrentChat = useCallback(
     (current) => {
       console.log(current)
-      dispatch(setCurrentChatAction(current))
+      setCurrentChatAction(current)
     },
-    [dispatch],
+    [setCurrentChatAction],
   )
 
   const handleContextMenu = useCallback(
     (e, chatId) => {
       e.preventDefault()
       const wilRemove = confirm("удалить чат?")
-      wilRemove && dispatch(deleteCurrentChatAction(chatId))
+      wilRemove && deleteCurrentChatAction(chatId)
     },
-    [dispatch],
+    [deleteCurrentChatAction],
   )
 
+  const { initialChats, currentChat } = chats
+  console.log(initialChats, currentChat, "props")
   return (
     <List>
       {initialChats.map((chat) => (
@@ -47,3 +50,15 @@ export const ChatList = () => {
     </List>
   )
 }
+
+const mapStateToProps = (state) => ({
+  chats: state.messageFieldReducer,
+})
+
+const mapDispachToProps = (dispatch) => ({
+  setCurrentChatAction: (current) => dispatch(setCurrentChatAction(current)),
+  deleteCurrentChatAction: (chatId) =>
+    dispatch(deleteCurrentChatAction(chatId)),
+})
+
+export const ChatList = connect(mapStateToProps, mapDispachToProps)(ChatLists)
