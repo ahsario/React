@@ -1,7 +1,7 @@
-export const getState = (store) => store
+export const getState = (state) => state.messageFieldReducer
 
 export function del(id, chat) {
-  const arr = [...[...chat].slice(0, id - 1), ...[...chat].slice(id)]
+  const arr = chat.filter((el, index) => index !== id - 1)
   return arr
 }
 

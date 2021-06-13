@@ -1,15 +1,18 @@
-import React, { useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { exampleAction } from "../store/actions";
-import { getState } from "../store/selectors";
-import { Home } from "./Home";
+import React, { useCallback } from "react"
+import { useSelector, useDispatch } from "react-redux"
+import { exampleAction } from "../store/actions"
+import { getState } from "../store/selectors"
+import { Home } from "./Home"
 
 export const Profile = () => {
-  const { showName, name } = useSelector(getState);
-  const dispatch = useDispatch();
+  const {
+    showName,
+    name: { name },
+  } = useSelector(getState)
+  const dispatch = useDispatch()
   const setShowName = useCallback(() => {
-    dispatch(exampleAction("Ахсар"));
-  }, [dispatch]);
+    dispatch(exampleAction("Ахсар"))
+  }, [dispatch])
 
   return (
     <>
@@ -24,5 +27,5 @@ export const Profile = () => {
       <span>Show Name</span>
       {showName && <div>{name}</div>}
     </>
-  );
-};
+  )
+}
