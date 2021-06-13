@@ -7,6 +7,7 @@ import {
   selectGistsError,
   selectGistsLoading,
 } from "../store/selectors"
+import { Home } from "./Home"
 
 export const GistsList = () => {
   const dispatch = useDispatch()
@@ -14,18 +15,13 @@ export const GistsList = () => {
   const error = useSelector(selectGistsError)
   const loading = useSelector(selectGistsLoading)
 
-  const requestGists = () => {
+  const requestGists = useCallback(() => {
     dispatch(getAllGists())
-  }
+  }, [dispatch])
 
   useEffect(() => {
-    requestGists()
-  }, [])
-
-  const renderGist = useCallback(
-    (gist) => <li key={gist.id}>{gist.description}</li>,
-    [],
-  )
+    dispatch(getAllGists())
+  }, [dispatch])
 
   if (loading) {
     return <CircularProgress />
@@ -40,5 +36,14 @@ export const GistsList = () => {
     )
   }
 
-  return <ul>{gists.map(renderGist)}</ul>
+  return (
+    <>
+      <Home />
+      <ul>
+        {gists.map((gist) => (
+          <li key={gist.id}>{gist.description}</li>
+        ))}
+      </ul>
+    </>
+  )
 }
