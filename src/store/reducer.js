@@ -1,3 +1,12 @@
+import {
+  EXAMPLE_ACTION,
+  ADD_MESSAGE_ACTION,
+  SET_CURRENT_CHAT,
+  NEW_CHAT_ACTION,
+  DEL_CHAT_ACTION,
+} from "../constants"
+import { del, addMessage } from "./selectors"
+
 const initialState = {
   showName: false,
   name: "",
@@ -40,43 +49,33 @@ const initialState = {
 
 export const messageFieldReducer = (state = initialState, action) => {
   switch (action.type) {
-    case "ADD_MESSAGE_ACTION":
+    case ADD_MESSAGE_ACTION:
       return {
         ...state,
-        initialChats: [
-          ...state.initialChats.filter((chat) => chat.id != state.currentChat),
-          {
-            id: state.currentChat,
-            name: state.initialChats[state.currentChat - 1].name,
-            messages: [
-              ...state.initialChats[state.currentChat - 1].messages,
-              action.payload.message,
-            ],
-          },
-        ].sort((a, b) => a.id - b.id),
+        initialChats: addMessage(state, action.payload),
       }
 
-    case "EXAMPLE_ACTION":
+    case EXAMPLE_ACTION:
       return {
         ...state,
         showName: !state.showName,
-        name: action.payload.name,
+        name: action.payload,
       }
 
-    case "SET_CURRENT_CHAT":
+    case SET_CURRENT_CHAT:
       return {
         ...state,
-        currentChat: action.payload.currentChat,
+        currentChat: action.payload,
       }
 
-    case "NEW_CHAT_ACTION":
+    case NEW_CHAT_ACTION:
       return {
         ...state,
         initialChats: [
           ...state.initialChats,
           {
             id: state.initialChats.length + 1,
-            name: action.payload.name,
+            name: action.payload,
             messages: [
               { text: "Привет!", sender: "bot" },
               { text: "Как дела?", sender: "bot" },
@@ -85,13 +84,10 @@ export const messageFieldReducer = (state = initialState, action) => {
         ],
       }
 
-    case "DEL_CHAT_ACTION":
+    case DEL_CHAT_ACTION:
       return {
         ...state,
-        initialChats: [
-          ...[...state.initialChats].slice(0, action.payload.id - 1),
-          ...[...state.initialChats].slice(action.payload.id),
-        ],
+        initialChats: del(action.payload, state.initialChats),
       }
 
     default:

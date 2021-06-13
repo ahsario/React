@@ -1,22 +1,17 @@
 import { TextField, FloatingActionButton } from "material-ui"
 import SendIcon from "material-ui/svg-icons/content/send"
 import React, { useEffect, useState, useRef, useCallback } from "react"
-import { useSelector, useDispatch, shallowEqual } from "react-redux"
-import { addMessageAction } from "../store/action"
-import { getState } from "../store/selectors"
+import { connect } from "react-redux"
+import { addMessageAction } from "../store/actions"
 import { Message } from "./Message"
 import "../styles/index.css"
 
-export const MessageField = () => {
+const MessageFields = ({ chats, addMessageAction }) => {
   const [input, setInput] = useState("")
   const textInput = useRef()
   useEffect(() => textInput.current.focus(), [])
 
-  const { initialChats, currentChat, name } = useSelector(
-    getState,
-    shallowEqual,
-  )
-  const dispatch = useDispatch()
+  const { initialChats, currentChat } = chats
 
   useEffect(() => {
     if (
@@ -41,25 +36,24 @@ export const MessageField = () => {
     if (event.keyCode === 13) {
       sendMessage(message)
       setInput("")
-      console.log(name, "add")
+      console.log(initialChats, "add")
     }
   }
 
   const sendMessage = useCallback(
     (message) => {
-      dispatch(addMessageAction({ text: message, sender: "me" }))
+      addMessageAction({ text: message, sender: "me" })
     },
-    [dispatch],
+    [addMessageAction],
   )
 
   const botMessage = useCallback(() => {
-    dispatch(
-      addMessageAction({
-        text: "Не приставай ко мне, я робот!",
-        sender: "bot",
-      }),
-    )
-  }, [dispatch])
+    addMessageAction({
+      text: "Не приставай ко мне, я робот!",
+      sender: "bot",
+    })
+  }, [addMessageAction])
+
   const messageElements = initialChats[currentChat - 1].messages.map(
     (message, index) => (
       <Message key={index} text={message.text} sender={message.sender} />
@@ -87,3 +81,16 @@ export const MessageField = () => {
     </div>
   )
 }
+
+const mapStateToProps = (state) => ({
+  chats: state.messageFieldReducer,
+})
+
+const mapDispachToProps = (dispatch) => ({
+  addMessageAction: (message) => dispatch(addMessageAction(message)),
+})
+
+export const MessageField = connect(
+  mapStateToProps,
+  mapDispachToProps,
+)(MessageFields)
